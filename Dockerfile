@@ -1,9 +1,12 @@
-FROM maven:3.8.1-jdk-11
+FROM maven:3.8.1-jdk-11 as maven_builder
 WORKDIR /
 ADD . /
+#RUN mvn clean install
+RUN ["/usr/local/bin/mvn-entrypoint.sh", "mvn", "verify", "clean", "--fail-never"]
 RUN mvn clean install
-RUN ls
+RUN mvn package -Dmaven.test.skip=true
 FROM tomcat:latest
-RUN cp -R  /usr/local/tomcat/webapps.dist/*  /usr/local/tomcat/webapps
-WORKDIR /root/.m2/repository/com/example/maven-project/webapp/1.0-SNAPSHOT
-COPY  *.war  /usr/local/tomcat/webapps
+RUN cp -r /usr/local/tomcat/webapps.dist/* /usr/local/tomcat/webapps
+COPY --from=maven_builder /webapp/target/webapp.war /usr/local/tomcat/webapps
+EXPOSE 8080
+#ENTRYPOINT ["java", "-jar", "api.jar"]
