@@ -1,8 +1,6 @@
 FROM tomcat:latest
-ENV HOME= /workspace/source/webapp/target
-RUN mkdir -p $HOME
-WORKDIR $HOME
-ADD pom.xml $HOME
+WORKDIR /
+ADD pom.xml /
 RUN mvn clean 
 RUN cp -R  /usr/local/tomcat/webapps.dist/*  /usr/local/tomcat/webapps
 RUN ls /usr/local/tomcat/webapps
