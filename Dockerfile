@@ -1,4 +1,4 @@
-FROM tomcat:latest
+FROM MAVEN:3.8.1-jdk-11
 WORKDIR /
 ADD pom.xml /
 RUN mvn clean 
