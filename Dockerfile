@@ -1,5 +1,6 @@
 FROM tomcat:latest
 ENV HOME= /workspace/source/webapp/target
+RUN mkdir -p $HOME
 WORKDIR $HOME
 ADD pom.xml $HOME
 RUN mvn clean 
